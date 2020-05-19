@@ -9,6 +9,10 @@ Pre-Requisites
 - Any modern browser: for working with the UI (and this document)
 - Postman: for working with the API of the F5 Cloud Services
 
+**IMPORTANT NOTE**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration.
+
+You can quickly tell if you have a full account by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_. If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you will need to create a full account & update user info before you can proceed with this lab. You can do so in the step 3(c) below via the F5 Cloud Services API using the Postman request titled "Set User Info (optional)", the details of which are outlined below after the Login.
+
 Lab Environment Overview
 ###############################
 
@@ -35,7 +39,7 @@ Lab Environment Setup
 `a)` Login   
 
 In order to use F5 Essential App Protect service, you need access to F5 Cloud Services and be logged in with a valid user account. If you need to sign up, or if you already have one, proceed to the `F5 Cloud Services portal <http://bit.ly/f5csreg>`_.  
-˚
+
 .. figure:: _figures/1-1.png  
 
 Once you've logged in with an account, you will be using the user name and password values in the lab to authenticate with the F5 Cloud Services and the API.
@@ -99,7 +103,23 @@ These tokens are then stored for subsequent calls using a function inside Postma
 
 .. figure:: _figures/10.jpg  
 
-`c)` Retrieve User ID & Account ID  
+`c)` OPTIONAL: Set User ID & Account Info
+
+**IMPORTANT NOTE**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration. You can quickly tell if you have by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_ If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you need to create a full account & update user info before you can proceed with this lab.
+
+You can do this by running the following **Set User Info** API call, after you've updated the Body of the request with your own organization & address information:
+
+.. figure:: _figures/237.jpg
+
+The response returns the following detail, including your own organization account ID (id):
+
+.. figure:: _figures/238.jpg
+
+More information on this API request can be found `here <https://portal.cloudservices.f5.com/docs#operation/CreateAccount>`_.
+
+At this point you should be a full user with an "Owned Account" and a primary organization account id, which can also be confirmed in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_ in the drop-down under your user name (top right), where you should see "Accounts you own:" and the Organization Account you created with **"Owner"** defined.
+
+`d)` Retrieve User ID & Account ID
 
 Select the **Get Current User** request and click **Send** to retrieve User ID and Account ID to be used in the further requests.  
 
@@ -115,7 +135,7 @@ The retrieved User ID and Account ID are then stored for subsequent calls.
 
 More detailed information on this API request can be found `here <http://bit.ly/37hyQw3>`_.  
 
-`d)` Let’s now retrieve FQDN with the **Get FQDN Record type (lab)** API call. Click **Send**. This call will pass your “ACCESS_TOKEN” in the header of the request to the Labs API in order to get a record that will be used to create F5 Essential App Protect instance in the F5 Cloud Services portal.  
+`e)` Let’s now retrieve FQDN with the **Get FQDN Record type (lab)** API call. Click **Send**. This call will pass your “ACCESS_TOKEN” in the header of the request to the Labs API in order to get a record that will be used to create F5 Essential App Protect instance in the F5 Cloud Services portal.
 Request:  
 
 .. figure:: _figures/74.png  
@@ -132,7 +152,7 @@ Sending this request will automatically capture of the Record variables:
 
 This record name will be used for creating Essential App Protect service in the F5 Cloud Services portal, as well as throughout the lab as the domain name for your test applications. 
 
-`e)` Test via Browser
+`f)` Test via Browser
 
 Let's now test our app using the FQDN we have just got.  Copy the "record" name from the Postman response and paste into your browser.
 
@@ -142,7 +162,7 @@ You will see your app which is not protected for now and goes directly to its se
 
 .. figure:: _figures/230.png 
 
-`f)` Get User Membership to F5 Cloud Services accounts
+`g)` Get User Membership to F5 Cloud Services accounts
 
 In Postman, send the **Get User Membership (optional)** request which returns info on your user’s access to Cloud Services accounts.
 
@@ -158,7 +178,7 @@ Your "account_id" will be retrieved using "account_name" and used in the subsequ
 
 More detailed information on this API request can be found `here <http://bit.ly/2Gfu1r3>`_. 
 
-`g)` Retrieve information on available catalogs and their IDs
+`h)` Retrieve information on available catalogs and their IDs
 
 Select the **Get Catalogs** request and click **Send** to retrieve data about the available Catalogs and their IDs.
 
