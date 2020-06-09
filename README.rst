@@ -7,9 +7,9 @@ Pre-Requisites
 ###############
 
 - Any modern browser: for working with the UI (and this document)
-- Postman: for working with the API of the F5 Cloud Services
+- `Postman <http://bit.ly/309wSLl>`_ **(REQUIRED)**: for working with the API of the F5 Cloud Services & the Labs API
 
-**IMPORTANT NOTE**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration.
+**NOTE (Existing F5 Cloud Services users only)**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration.
 
 You can quickly tell if you have a full account by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_. If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you will need to create a full account & update user info before you can proceed with this lab. You can do so in step 3(c) below via the F5 Cloud Services API using the Postman request titled "Set User Info (optional)", the details of which are outlined below after the Login.
 
@@ -146,35 +146,35 @@ The response will return your record name, its status, current type and IP.
 
 .. figure:: _figures/156.png
 
-Note that in subsequent requests record type will be changed to CNAME in order to change DNS settings and let traffic go through Essential App Protect. Record IP will be used by the F5 Cloud Services portal to find the nearest available instance when creating Essential App Protect service.    
+Note that at this stage our test application is using an A-record to route traffic that's going to the FQDN to the IP of the app server. During the lab we will update this DNS record to a CNAME generated during the Essential App Protect instance setup, so that the app traffic will directed to Essential App Protect instance first, and then the "scrubbed" traffic will be directed to our app IP (or FQDN) depending on the configuration.
 
-Sending this request will automatically capture of the Record variables:  
+When this request completes successfully the value of the FQDN Record will be captured as a variable:  
 
 .. figure:: _figures/26.jpg  
 
-This record name will be used for creating Essential App Protect service in the F5 Cloud Services portal, as well as throughout the lab as the domain name for your test applications. 
+Take note of this FQDN record; it will be used for creating Essential App Protect service in the F5 Cloud Services portal, as well as throughout the lab as the domain name for your test application. 
 
 `f)` Test via Browser
 
-Let's now test our app using the FQDN we have just got.  Copy the "record" name from the Postman response and paste into your browser.
+Let's now look at your test application by browsing to the FQDN Record we just received.  Copy the "record" name from the previous Postman response and paste it into your browser.
 
 .. figure:: _figures/115.png 
 
-You will see your app which is not protected for now and goes directly to its server.  
+You will see the ficticious web app (BuyTime Auction website) which is currently not protected. This means all of the traffic is routed directly to the app server.  
 
 .. figure:: _figures/230.png 
 
 `g)` Get User Membership to F5 Cloud Services accounts
 
-In Postman, send the **Get User Membership (optional)** request which returns info on your user’s access to Cloud Services accounts.
+Back in Postman, let's send the **Get User Membership (optional)** request which returns info on your access to F5 Cloud Services accounts.
 
 .. figure:: _figures/157.png
 
-You will see account ids, names, roles and other information in the body of response. 
+You will see account ids, names, roles and other information in the body of the response. 
 
 .. figure:: _figures/158.png
 
-Your "account_id" will be retrieved using "account_name" and used in the subsequent requests.
+Your "account_id" will be retrieved using the "account_name" value and will be used in the subsequent requests.
 
 .. figure:: _figures/159.png
 
@@ -182,19 +182,19 @@ More detailed information on this API request can be found `here <http://bit.ly/
 
 `h)` Retrieve information on available catalogs and their IDs
 
-Select the **Get Catalogs** request and click **Send** to retrieve data about the available Catalogs and their IDs.
+Select the **Get Catalogs** request and click **Send** to retrieve the data about the available Catalogs and their IDs.
 
 .. figure:: _figures/160.png
 
-You can see available catalogs:
+You can see the available catalogs:
 
 .. figure:: _figures/161.png
 
-The retrieved IDs are then stored for subsequent calls using a function inside Postman to set environment variables. You can see the test function in the "Tests" tab:
+The retrieved IDs are then stored for subsequent calls using a function inside Postman that sets environment variables. You can see the test function in the "Tests" tab of the request:
 
 .. figure:: _figures/162.png
 
-More detailed information on this API request can be found `here <http://bit.ly/36j1Yl4>`_. 
+More detailed information on this API call can be found `here <http://bit.ly/36j1Yl4>`_. 
 
 F5 Essential App Protect Service 
 ##################### 
@@ -202,7 +202,7 @@ F5 Essential App Protect Service
 1. Create F5 Essential App Protect Service via the F5 Cloud Services Portal  
 ************************************************************************ 
 
-`a)` In order to create the Essential App Protect service, open the **Get FQDN Record type (lab)** request in Postman and copy "record" name in the response.  
+`a)` In order to create the Essential App Protect service, we need the FQDN Record info from a previously run API call. You can retrieve it by opening the **Get FQDN Record type (lab)** request in Postman and copying the value of the "record" key in the response.  
 
 .. figure:: _figures/115.png
 
@@ -210,43 +210,49 @@ F5 Essential App Protect Service
 
 .. figure:: _figures/116.png
 
-`c)` Paste the record name you copied in step 1.a) above into "Fully Qualified Domain Name (FQDN)" field and click **Save & Continue**.
+`c)` Paste the record name you copied in step 1.a) above into "Fully Qualified Domain Name (FQDN)" field. The "Name this application" field will auto-populate; keep this value as-is for simplicity. The "Add a description" field is optional. Click **Save & Continue**.
 
 .. figure:: _figures/117.png 
 
-Using record IP, the system will look for the nearest instance, gather app endpoint and region detail, show them and ask you to **Save & Continue**.  
+Essential App Protect does a FQDN lookup to retrieve the corresponding IP of the FQDN record, and will gather info on the location and geo-proximity of the nearest cloud region, and will display these as recommendations as to where to deploy the EAP instance. 
+
+At this point, some users may want to select a different value in the drop-down for the EAP Region, which you can update/change at any time in the EAP instance settings after the instance setup.
+
+**NOTE**: If after a minute you don't see the endpoint info, hit refresh and click "Complete Setup" to return to this step / see the info.
+
+Click **Save & Continue**.  
 
 .. figure:: _figures/118.png 
 
-As you can see, the endpoint belongs to North America, US East (N. Virginia) and is deployed on Amazon AWS.  
+Note the info on the IP, City, State, and the Cloud Provider used by our test application. It also shows the region used by the cloud provider derived from the FQDN/IP information. As you can see in the screenshot, the example test app endpoint is located in North America, US East (N. Virginia) and is deployed on Amazon AWS. Note that the default configuration will be to route the traffic that's hitting the EAP instance to the identified IP address of the application endpoint.
 
-`d)` The system will ask you to provide an SSL/TLS certificate. Let’s tick “I will provide certificate details later” and **Save & Continue**.  
+`d)` You can now provide an SSL/TLS certificate, if you wanted to. However, for the lab at this point we will skip uploading the certificate and will come back to the certificate section later; for now only select "Enable HTTP Listener" with Port 80, and **uncheck** "Enable HTTPS Listener", then click **Save & Continue**.  
 
-.. figure:: _figures/99.png 
+.. figure:: _figures/tls-ssl-v2.png 
 
-`e)` Enable all the methods of protection and click **Save & Continue**. In case you need to update this property, you can do it later in the **PROTECT APPLICATION** section. 
+`e)` Accept the defaults for all of the app protect features on the next screen and click **Save & Continue**. In case you need to update this property in the future, you can do so later in the **PROTECT APPLICATION** section.  
 
 .. figure:: _figures/100.png 
 
-`f)` Click **Done** and Essential App Protect service will be created and ready for use.  
+`f)` Here take note of the CNAME value that's generated for your Essential App Protect instance. This is the value that we will use to point our test application's DNS record to; by changing it from an IP address to a CNAME. You should probably copy + paste it to a temporary document, but we'll also retrieve it through the UI and an API call later. Click **Done** and Essential App Protect service will be created and should be ready for use shortly.  
 
 .. figure:: _figures/101.png  
 
-Note that this process may take some time. You can check the status in the **All my applications** option of the dropdown menu: 
+**IMPORTANT**: Note that this process may take some time. You can check the status in the **All my applications** option of the dropdown menu: 
 
 .. figure:: _figures/231.png 
 
 `g)` Test via Browser 
 
-When the system shows that your instance is active, let's test it. Select your instance in the dropdown menu, go to the **PROTECT APPLICATION** tab, then **DNS Settings**  and copy the CNAME.
+When the setup finished and you see the instance is created, you can test the CNAME value that was provided. Select your newly-created EAP instance in the dropdown menu, go to the **PROTECT APPLICATION** tab, then **DNS Settings**  and copy the CNAME value.
 
 .. figure:: _figures/232.png 
 
-Paste it into your browser and you will get to the instance:
+Paste it into your browser and you will be routed to the EAP instance, and then *scrubbed* traffic will flow to the IP of the app endpoint as captured during setup.
 
 .. figure:: _figures/233.png 
 
-Now that your Essential App Protect instance is created, we need to change DNS settings using CNAME and start routing the traffic through Essential App Protect. In order to do that follow the steps below.  
+Now that your Essential App Protect instance is created, we will update the DNS settings of our test app by switching the A-record (that previously pointed to the IP address of the app server) to the newly-created CNAME provided by the EAP setup. This way we will start routing all of the traffic that resolves the app's DNS record to Essential App Protect. Let's do that in the following steps! 
 
 2. Update DNS Settings using CNAME  
 ******************************** 
