@@ -99,7 +99,7 @@ These tokens are then stored for subsequent calls using a function inside Postma
 
 .. figure:: _figures/9.jpg  
 
-**IMPORTANT NOTE**: If any of the subsequent Postman calls return a blank response or **"status": "unauthorized"** response (see the screenshot below), it means that your user token has expired and you simply need to re-login. To do that you just need to re-send the **Login** request using Postman to capture a new token.  
+**IMPORTANT NOTE**: If any of the subsequent Postman calls return a blank response, **{}**, or **"status": "unauthorized"** response (see the screenshot below), it means that your user token has expired and you simply need to re-login. To do that you just need to re-send the **Login** request using Postman to capture a new token.  
 
 .. figure:: _figures/10.jpg  
 
@@ -530,87 +530,81 @@ If you prefer to customize your blocked page acc to your wish, you can do it usi
 
 **Note**: It may take a few seconds to update the service with your changes.
 
-13. Add New Endpoints 
-*********************
+13. Geo-proximity with a New Endpoint
+*************************************
 
-Let's imagine your website is to function both in the USA and in Europe which requires two endpoints. But for now, you have only one IP endpoint added to Essential App Protect - North America, US East (N. Virginia). 
+Now let's imagine your application has more than just one endpoint, because it's serving a global audience. For simplicity, we can assume we'd like to serve customers in Europe, and we already have another EU-based instance of an application. Now we would like to route traffic to the closest region. 
+
+But for now, we only have one IP endpoint defined in our coniguration named "us-east-1" located in North America, US East (N. Virginia).
 
 .. figure:: _figures/180.png 
 
-If you need to add the second one, say, in Europe, you can do it via Postman.
+To serve our users in Europe we can now add a second app endpoint "eu-west-2" into the configuration using Postman:
 
 Send the **Add new endpoints** request in Postman: 
 
 .. figure:: _figures/181.png 
 
-You will see the Endpoint added in the returned response located in Europe and deployed on AWS:
+You will see the new endpoint added in the returned response that its location is recognized to be in Europe and deployed on AWS:
 
 .. figure:: _figures/182.png 
 
 More detailed information on this request can be found `here <https://bit.ly/3ckOJVA>`_. 
 
-You will also see the new endpoint in the F5 Cloud Services portal:
+You will also see the new endpoint in the **Deployed Regions** section inside the F5 Cloud Services portal, under EAP's PROTECT APPLICATION **General** tab:
 
 .. figure:: _figures/183.png 
 
 Note that this operation may take up to a few minutes due to its deployment. 
 
-14. Test New Endpoint via Postman
+14. Test the New Endpoint via Postman
 ***********************************
 
-Let's now test the endpoint we've just created via Postman.
+Now that we have defined a new deployed regional IP endpoint, we can test how the traffic from different countries is being routed when it hits our EAP service. Using the lab service API, let's see where we'll get sent when the traffic originates from a proxy service in Europe.
 
-Send the **Test Second Endpoint (lab)** request: 
+We'll do so via Postman **Test Second Endpoint (lab)** request: 
 
 .. figure:: _figures/186.png 
 
-Here's what you should see in the response:
+As expected, the HTML content that we get when is from the application instance in EU: **FR Auction**.
 
 .. figure:: _figures/187.png 
 
-15. Attacks via Browser 
+15. SQL Injection Attack via Browser 
 *************************
 
-Let's now simulate some attacks via browser and follow them in the dashboard of the F5 Cloud Services portal. 
-
-`a)` In order to simulate Illegal File type, paste "**Fully Qualified Domain Name (FQDN)**/nginx.config" address to your browser and the page will be blocked:
-
-.. figure:: _figures/153.png 
-
-Now let's go back to the F5 Cloud Services portal and see the dashboard with the new attack:
-
-.. figure:: _figures/154.png 
-
-You can see the type of attack and some more detailed information in the **VIEW EVENTS** tab:
-
-.. figure:: _figures/155.png 
-
-`b)` Let's now simulate SQL Injection attack via browser and our "BuyTime Auction" app. Copy your FQDN from the F5 Cloud Services portal and paste in your browser. 
+Let's now simulate a SQL Injection statement through a browser with our protected "BuyTime Auction" test app. Copy your app's FQDN from the "Application Details" section of the **General** tab in the F5 Cloud Services portal and paste into your browser.
 
 .. figure:: _figures/188.png 
 
-Fill in **' OR 1=1; '** as login  and fill in any password. Click **Login**.
+Click login and fill in **' OR 1=1; '** in the login field (make sure to use proper spaces and include the single quotes) and fill in any value in the password field. Click **Login**.
 
 .. figure:: _figures/184.png 
 
-And you will see that SQL Injection attack is blocked.  
+Essential App Protect blocks this attack, which you will see via the "Blocked!" message we've defined earlier.  
 
 .. figure:: _figures/189.png 
 
-You can see the details of this attack in the **VIEW EVENTS** tab in the F5 Cloud Services portal:
+Now you can explore the details of this attack in the **VIEW EVENTS** tab in the F5 Cloud Services portal:
 
 .. figure:: _figures/190.png 
 
 16. Check the Map
 ****************
 
-Now let’s see the map of our attacks on the F5 Cloud Services portal. You need to select the **MONITOR APPLICATION** tab where you will see the dashboard.
+Now let’s see the map of our attacks on the F5 Cloud Services portal. You need to select the **MONITOR APPLICATION** tab where you will see the dashboard. 
 
-You can see our latest attacks on the map:
+The Dashboard provides an all-up view of the Malicious Requests (top left) and location and type of the attacks and which endpoints have been the target. 
+
+The histogram shows the history of malicious activity over the last two hours in five-minute increments. The doughnut chart shows the percentage of malicious requests blocked during the last time period, as well as the specific numbers of blocked and not blocked requests. Note that when the service is in "monitoring" mode some or none of the requests may be blocked.
+
+.. figure:: _figures/201.png 
+
+As expected, the map is a way to visualize the malicious requests:
 
 .. figure:: _figures/191.png 
 
-If you wish to see more detailed information, you can hover over a specific attack and its information will appear:
+If you wish to see more detailed information, you can hover over a specific attack and get more details:
 
 .. figure:: _figures/192.png 
 
@@ -618,16 +612,16 @@ To the left of the map, you can see the legend showing the number of application
 
 .. figure:: _figures/215.png 
 
-The yellow lines on the map show the attacks within the last five minutes. 
+The yellow lines on the map show the malicious requests that were captured in the past five minutes. 
 
 17. Start Attacks via Postman 
 *************************
 
-`a)` Let’s now return to Postman and simulate the attacks by sending the **Start EAP Attack (lab)** request.
+`a)` Let’s now return to Postman and use our Lab service API to simulate a flood of attacks by sending the **Start EAP Attack (lab)** request.
 
 .. figure:: _figures/193.png 
 
-And the response will be "ok" which means that attacks have been activated:
+The response should be "ok" which means that the attacks have been activated (against your test app only):
 
 .. figure:: _figures/194.png 
 
@@ -635,27 +629,33 @@ And the response will be "ok" which means that attacks have been activated:
 
 Let’s go back to the F5 Cloud Services portal and check the map in the **MONITOR APPLICATION** tab. 
 
-You can see our two endpoints and the latest attacks on the map:
+You can see our two app endpoints (blue circles) and the latest attacks on the map:
 
 .. figure:: _figures/200.png 
 
-If an endpoint is being attacked at the moment, the type of attack is shown over it. You can see it by hovering over:
+If an endpoint is being attacked at the moment, the source and the type of the malicious requsets is shown by hovering over the target endpoint:
 
 .. figure:: _figures/203.png 
 
-In **MONITOR APPLICATION** you will find information on malicious requests received by the application. The histogram shows the history of malicious activity over the last two hours in five-minute increments. The donut chart shows the percentage of malicious requests blocked during the last time period, as well as the specific numbers of blocked and not blocked requests.
-
-.. figure:: _figures/201.png 
-
-In case you need to zoom in some cluster of attacks, just click on an attack cluster and the map will be zoomed in:
+If there are multiple attacks from the same region, you can zoom in on the attack cluster by clicking on an attack cluster and the map will be zoomed in:
 
 .. figure:: _figures/202.png 
 
+18. View Events via UI  
+**********************
 
-18. View Events via Postman  
-************************
+You can analyze the detail of these attacks via the UI in the **VIEW EVENTS** tab of the EAP service. 
 
-Now return to Postman to get more detailed information on the simulated attacks. Send the **Get EAP Events Stream** request which uses “subscription_id” and “service_instance_id”.
+.. figure:: _figures/197.png 
+
+You can also look at any of the individual malicious requests for details on the attack signatures triggered, the type of an attack, and action you can assign to the originating IP address (block, for example). You can also choose to flag this request as a false positive by marking it as exception.
+
+.. figure:: _figures/111-v2.png 
+
+19. View Events via the API  
+***************************
+
+Now we will use the EAP API event stream to get the event details of the simulated attacks. Send the **Get EAP Events Stream** request which uses “subscription_id” and “service_instance_id”.
 
 .. figure:: _figures/195.png 
 
@@ -665,21 +665,10 @@ You can see different attack characteristics in the response, including number, 
 
 More detailed information on this request can be found `here <https://bit.ly/2VttrPh>`_. 
 
-19. View Events via UI  
-**************************** 
-
-You can also see the attacks via UI. All the detailed information can be found in the **VIEW EVENTS** tab of the F5 Cloud Services portal. 
-
-.. figure:: _figures/197.png 
-
-You can also set some specific rules for each attack and its IP individually:
-
-.. figure:: _figures/111.png 
-
 20. Specify SSL Certificate via Postman
-***************************
+***************************************
 
-When creating Essential App Protect instance in one of the steps above, we skipped providing an SSL/TLS certificate. Let's now get and implement it via Postman. 
+When creating Essential App Protect instance at the start of the lab, we chose to skip providing an SSL/TLS certificate. Let's now implement HTTPS/SSL via Postman. 
 
 `a)` Let's send the **Get SSL Certificate (lab)** request:
 
@@ -693,7 +682,7 @@ The retrieved certificate details are then stored for subsequent calls using a f
 
 .. figure:: _figures/206.png 
 
-`b)` Now we'll upload the certificate to the F5 Cloud Services portal. In order to do that, send the **Upload SSL Certificate** request:
+`b)` Now we'll upload the certificate to the F5 Essential App Protect service. In order to do that, send the **Upload SSL Certificate** request:
 
 .. figure:: _figures/207.png 
 
@@ -701,18 +690,18 @@ The response will return the certificate ID which will be used for updating the 
 
 .. figure:: _figures/208.png 
 
-`c)` The next step will associate the certificate with the Essential App Protect app. In order to do that, send the **Update EAP SSL Certificate** request from Postman which uses certificate ID retrieved above:
+`c)` The next step will enable Essential App Protect configuration to support HTTPS and configure TLS using our certificate id from the above step. In order to do that, send the **Update EAP SSL Certificate** request from Postman:
 
 .. figure:: _figures/209.png 
 
-The response shows all the information regarding instance the certificate is connected to:
+The response shows the updated information for our EAP instance, please review the "waf_service" section, noting the "http" and "https" parts:
 
 .. figure:: _figures/210.png 
 
 
 `d)` Now we need to restart our instance for the certificate to become active. 
 
-   `1.` In order to do that, go back to Postman and send the **Suspend EAP Subscription** request:
+   `1.` In Postman send the **Suspend EAP Subscription** request:
    
    .. figure:: _figures/212.png 
    
@@ -720,11 +709,13 @@ The response shows all the information regarding instance the certificate is con
    
    .. figure:: _figures/213.png 
    
-   Note that this operation may take some time. Proceed to the next step after the status of your instance is changed to "Inactive" in the F5 Cloud Services portal. The status can be seen in the **All my applications** option of the dropdown menu.
+   Note that this operation takes some time to complete.
+   
+   Proceed to the next step **only** after the status of your instance is changed from "Suspending" to "Inactive" in the F5 Cloud Services portal. The status can be seen in the **All my applications** option of the dropdown menu.
    
    .. figure:: _figures/235.png
    
-   `2.` Let's now activate the service with the SSL certificate. Send the **Activate EAP Subscription** request:
+   `2.` Once we confirm the Status of the instance is "Inactive", let's now activate the service that will apply the SSL certificate details in the process. Send the **Activate EAP Subscription** request:
    
    .. figure:: _figures/214.png 
    
@@ -732,23 +723,40 @@ The response shows all the information regarding instance the certificate is con
    
    .. figure:: _figures/216.png 
    
-   Note that this operation may take some time. Proceed to the next step after the status of your instance is changed to "Active" in the F5 Cloud Services portal. The status can be seen in the **All my applications** option of the dropdown menu.
+   **NOTE:** this operation may take some time! Grab a coffee, take a quick break, and only proceed to the next step after the status of your instance is changed to "Active" in the F5 Cloud Services portal. 
+   
+   The status can be seen in the **All my applications** option of the dropdown menu.
    
    .. figure:: _figures/236.png 
    
-`e)` Check SSL Certificate via UI
+`e)` Check SSL Certificate via the UI
 
-Let's now check the certificate via UI. Open **PROTECT APPLICATION** and go to the **General** tab. You will see the uploaded and updated certificate: 
+When the EAP instance is back to "Active" (and a few minutes after the status changes) we're ready to push into the home stretch of our lab! 
 
-.. figure:: _figures/211.png 
+Let's look at the SSL/certificate details via the UI. 
 
-`f)` Now we can check our "BuyTime Auction" app with the SSL certificate via browser. Copy your FQDN from the **General** tab in the F5 Cloud Services portal and paste to your browser starting with "**https://**". 
+Click on your EAP instance, and open the **PROTECT APPLICATION** secttion, then click on the **General** tab. You will see the SSL/TLS details and the name of the domain & the expiration data of the certificate. 
+
+In the "Manage listener details" you can see that both listeners are enabled, but HTTP is redirected to HTTPS. Let's give it a try!
+
+.. figure:: _figures/211-v2.png 
+
+`f)` In the browser paste your original app FQDN (without https:// for now). For simlicity you can copy the FQDN fied value from the **General** tab in the portal and paste into your browser. 
 
 .. figure:: _figures/217.png 
 
-You can see that the connection is safe. Now let's click the **Certificate** and see its details:
+You will notice that the HTTP is redirected to HTTPS, showing that the connection is now safe. You may click on the **Certificate** and see its details:
 
 .. figure:: _figures/218.png 
+
+**YOU'RE DONE !**
+*****************
+
+Congrats on completing this lab! You've create an instance of F5 Essential App Protect, protected your test app, and sent a number of different attacks with different configurations. Hopefully this was fun, and you've learned something in the process! 
+
+At this point feel free to explore and repeat any of the previous steps of the lab, but should you want to clean up the resources you've created and remove your services, then follow the steps below.
+
+The only remaining step is to clean up your service (retire the instance, reset the App DNS, and clear the token). This step is optional, although we do recommend you clean / remove the Postman tokens.
 
 Clean Up  
 ######## 
@@ -758,31 +766,30 @@ At this point feel free to explore and repeat any of the previous steps of the l
 `1.` Clean Up via Postman
 *************************
 
-`a)` In order to clean up Essential App Protect instance we've created and remove the subscription, send the **Retire EAP Subscription** request which uses the relevant “subscription_id”:
+`a)` To clean up Essential App Protect instance we created and to remove the subscription, send the **Retire EAP Subscription** request which will use the store “subscription_id”:
 
 .. figure:: _figures/219.png
  
-You will see “retired” status in the response body which means that it’s not available on the F5 Cloud Services portal anymore.
+You will see status of “retired” status in the response body which means that it’s no longer available in the F5 Cloud Services portal.
  
 .. figure:: _figures/220.png
   
-More detailed information on these API requests can be found `here <http://bit.ly/2Gf166I>`_.  
+More details on these API requests can be found `here <http://bit.ly/2Gf166I>`_.  
 
+`b)` Reset DNS entry for test app
 
-`b)` Change Essential App Protect Record type 
-
-Let's send the **Reset EAP Record (lab)** request to change record type from CNAME to A back:
+Let's send the **Reset EAP Record (lab)** request to change record type from CNAME (provided by the EAP service) to the originla A-record pointing to the original app server IP:
 
 .. figure:: _figures/222.png
  
-The request will show the reset type and IP value:
+The request will show the reset performed and the IP value:
 
 .. figure:: _figures/223.png
 
 `2.` Clear Tokens from the Lab Service API
 ******************************************
  
-We recommend that you clear your tokens from the Lab Service API for security purposes. In order to do that, send the **Logout** request, which uses your ACCESS_TOKEN:
+We recommend that you clear your tokens that were used by Postman from the Lab Service API for security purposes. In order to do that, send the **Logout** request, which uses your ACCESS_TOKEN:
  
 .. figure:: _figures/224.png
  
@@ -790,8 +797,10 @@ You will get the following response with the status showing "200 OK":
  
 .. figure:: _figures/225.png
  
-Your ACCESS_TOKEN will be considered invalid:
+Your ACCESS_TOKEN will now be reset and no longer valid.
  
 .. figure:: _figures/226.png
 
 More detailed information on these API requests can be found `here <https://bit.ly/2VttrPh>`_.  
+
+**Thank you for taking the time to complete this lab!**
