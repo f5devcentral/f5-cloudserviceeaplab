@@ -494,7 +494,7 @@ You can choose to block a set of IP addresses via "IP Enforcement Rules". Below 
 
 .. figure:: _figures/150.png
 
-`b)` Here we will add "34.229.48.248" IP to be blocked, click "+" to add a new record and use "77.120.157.224" IP to be whitelisted (allowed). Add a short description for each, check to log events for the blocked IP and click **Update**. 
+`b)` Here we will add "184.73.19.8" IP to be blocked, click "+" to add a new record and use "3.233.133.93" IP to be whitelisted (allowed). Add a short description for each, check to log events for the blocked IP and click **Update**.
 
 .. figure:: _figures/151.png
 
