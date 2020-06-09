@@ -146,13 +146,13 @@ The response will return your record name, its status, current type and IP.
 
 .. figure:: _figures/156.png
 
-Note that at this stage our test application is using an A-record to route traffic that's going to the FQDN to the IP of the app server. During the lab we will update this DNS record to a CNAME generated during the Essential App Protect instance setup, so that the app traffic will directed to Essential App Protect instance first, and then the "scrubbed" traffic will be directed to our app IP (or FQDN) depending on the configuration.
+Note that at this stage our test application is using an A-record to route traffic that's going to the FQDN to the IP of the app server. During the lab we will update this DNS record to a CNAME generated during the Essential App Protect instance setup, so that the app traffic will be directed to Essential App Protect instance first, and then the "scrubbed" traffic will be directed to our app IP (or FQDN) depending on the configuration.
 
 When this request completes successfully the value of the FQDN Record will be captured as a variable:  
 
 .. figure:: _figures/26.jpg  
 
-Take note of this FQDN record; it will be used for creating Essential App Protect service in the F5 Cloud Services portal, as well as throughout the lab as the domain name for your test application. 
+**IMPORTANT NOTE:** Make note of this FQDN record; we will use it many time throughout the lab, and for creating the Essential App Protect service in the F5 Cloud Services portal, as well as throughout the lab as the domain name for your test application. 
 
 `f)` Test via Browser
 
@@ -160,7 +160,7 @@ Let's now look at your test application by browsing to the FQDN Record we just r
 
 .. figure:: _figures/115.png 
 
-You will see the ficticious web app (BuyTime Auction website) which is currently not protected. This means all of the traffic is routed directly to the app server.  
+You will see the fictitious web app (BuyTime Auction website) which is currently not protected. This means all of the traffic is routed directly to the app server.  
 
 .. figure:: _figures/230.png 
 
@@ -170,7 +170,7 @@ Back in Postman, let's send the **Get User Membership (optional)** request which
 
 .. figure:: _figures/157.png
 
-You will see account ids, names, roles and other information in the body of the response. 
+You will see account ids, names, roles, and other information in the body of the response. 
 
 .. figure:: _figures/158.png
 
@@ -214,7 +214,7 @@ F5 Essential App Protect Service
 
 .. figure:: _figures/117.png 
 
-Essential App Protect does a FQDN lookup to retrieve the corresponding IP of the FQDN record, and will gather info on the location and geo-proximity of the nearest cloud region, and will display these as recommendations as to where to deploy the EAP instance. 
+Essential App Protect does an FQDN lookup to retrieve the corresponding IP of the FQDN record, and will gather info on the location and geo-proximity of the nearest cloud region, and will display these as recommendations as to where to deploy the EAP instance. 
 
 At this point, some users may want to select a different value in the drop-down for the EAP Region, which you can update/change at any time in the EAP instance settings after the instance setup.
 
@@ -226,7 +226,7 @@ Click **Save & Continue**.
 
 Note the info on the IP, City, State, and the Cloud Provider used by our test application. It also shows the region used by the cloud provider derived from the FQDN/IP information. As you can see in the screenshot, the example test app endpoint is located in North America, US East (N. Virginia) and is deployed on Amazon AWS. Note that the default configuration will be to route the traffic that's hitting the EAP instance to the identified IP address of the application endpoint.
 
-`d)` You can now provide an SSL/TLS certificate, if you wanted to. However, for the lab at this point we will skip uploading the certificate and will come back to the certificate section later; for now only select "Enable HTTP Listener" with Port 80, and **uncheck** "Enable HTTPS Listener", then click **Save & Continue**.  
+`d)` You can now provide an SSL/TLS certificate if you wanted to. However, for the lab at this point we will skip uploading the certificate and will come back to the certificate section later; for now only select "Enable HTTP Listener" with Port 80, and **uncheck** "Enable HTTPS Listener", then click **Save & Continue**.  
 
 .. figure:: _figures/tls-ssl-v2.png 
 
@@ -234,7 +234,7 @@ Note the info on the IP, City, State, and the Cloud Provider used by our test ap
 
 .. figure:: _figures/100.png 
 
-`f)` Here take note of the CNAME value that's generated for your Essential App Protect instance. This is the value that we will use to point our test application's DNS record to; by changing it from an IP address to a CNAME. You should probably copy + paste it to a temporary document, but we'll also retrieve it through the UI and an API call later. Click **Done** and Essential App Protect service will be created and should be ready for use shortly.  
+`f)` Here take note of the CNAME value that's generated for your Essential App Protect instance. This value will be used to update our application's DNS record by changing it from an IP address to a CNAME. You should probably copy + paste it to a temporary document, but we'll also retrieve it through the UI and an API call later. Click **Done** and Essential App Protect service will be created and should be ready for use shortly.  
 
 .. figure:: _figures/101.png  
 
@@ -244,7 +244,7 @@ Note the info on the IP, City, State, and the Cloud Provider used by our test ap
 
 `g)` Test via Browser 
 
-When the setup finished and you see the instance is created, you can test the CNAME value that was provided. Select your newly-created EAP instance in the dropdown menu, go to the **PROTECT APPLICATION** tab, then **DNS Settings**  and copy the CNAME value.
+When the setup finished and you see the instance is created, you can test the CNAME value that was provided. Select your newly-created EAP instance in the dropdown menu, go to the **PROTECT APPLICATION** tab, then **DNS Settings** where you copy the CNAME value.
 
 .. figure:: _figures/232.png 
 
@@ -271,7 +271,7 @@ The response will return all information on your instance which we have created 
 
 .. figure:: _figures/165.png
 
-The retrieved CNAME will stored as a variables and will also be used to update the DNS settings:
+The retrieved CNAME will be stored as a variable and will also be used to update the DNS settings:
 
 .. figure:: _figures/166.png
 
@@ -289,7 +289,7 @@ The response will show the updated type ("CNAME") and value:
 
 .. figure:: _figures/129.png
 
-The response will show that record type is changed from "A" to "CNAME" (see step 3.d) above), as well as "value" is updated, which means that app traffic now goes through Essential App Protect instance and is actively protected.   
+The response will show that record type is changed from "A" to "CNAME" (see step 3.d) above), as well as "value" is updated, which means that app traffic now goes through the Essential App Protect instance and is actively protected.   
 
 .. figure:: _figures/128.png
 
@@ -302,20 +302,20 @@ Return to the F5 Cloud Services portal, open the **Essential App Protect** tab, 
 You should see "Success" indicating that our DNS updates succeeded!
 
 
-`f)` Test via Browser
+`f)` Test via your Browser
 
-Let's now test the updated DNS setting via browser. Return to the F5 Cloud Services portal, open the **General** tab and copy the original FQDN of the test app.
+Let's now test the updated DNS setting via your browser. Return to the F5 Cloud Services portal, open the **General** tab and copy the original FQDN of the test app.
 
 .. figure:: _figures/234.png
 
-Paste it into your browser and you will see the NA2 instance of the Auction website and all of the requests will now be flowing through your very own Essential App Protect instance, which means your app is now ready to be protected. However, any malicious requests will not be blocked yet, as we have not turned on "Blocking" mode at this point. We can do so in the subsequent steps.
+Paste it into your browser and you will see the NA2 instance of the Auction website and all of the requests will now be flowing through your very own Essential App Protect instance, which means your app is now ready to be protected. However, any malicious requests will not be blocked yet, as we have not turned on the "Blocking" mode at this point. We can do so in the subsequent steps.
 
 .. figure:: _figures/131.png
 
 3. Review the JSON via UI 
 *************************
 
-To retrieve the full configuration of your Essential App Protect instance or to edit some of its properties programatically, you can use the UI or the API to access its JSON configuration.
+To retrieve the full configuration of your Essential App Protect instance or to edit some of its properties programmatically, you can use the UI or the API to access its JSON configuration.
 
 To view the JSON via the F5 Cloud Services portal, open **PROTECT APPLICATION** and go to the **JSON configuration** tab. 
 
@@ -331,11 +331,11 @@ In the "application" section, we can see our FQDN, region our instance belongs t
 
 .. figure:: _figures/134.png
 
-In the "policy" section notice the protection settings, as well as options for diferent attack types.
+In the "policy" section notice the protection settings, as well as options for different attack types.
 
 .. figure:: _figures/135.png
 
-More detailed information on attack types can be found in the Section 5 below. 
+More detailed information on attack types can be found in Section 5 below. 
 
 4. Review the JSON via Postman 
 *******************************
@@ -386,7 +386,7 @@ As you see, our "Illegal file type" attack has appeared in the events; notice th
 6. Update Monitoring to Blocking via UI 
 *************************************** 
 
-For now all the threats of your app are only monitored without any actions taken. You can change monitoring to blocking both via the F5 Cloud Services portal and via Postman. Let's start with changing from monitoring to blocking for High-risk Attack Mitigation via the F5 Cloud Services portal, and for Malicious IP and Threat Campaigns via Postman in the following section. 
+For now all of the requests flowing to your app are only monitored without any actions taken. You can change monitoring to blocking both via the F5 Cloud Services portal and via Postman. Let's start with changing from monitoring to blocking for High-risk Attack Mitigation via the F5 Cloud Services portal, and for Malicious IP and Threat Campaigns via Postman in the following section. 
 
 `a)` In order to start blocking attacks, go to the **PROTECT APPLICATION** tab, then open **High-risk Attack Mitigation** and toggle **Blocking Mode** on. Click **Update** (and give it a few seconds to update).  
 
@@ -452,7 +452,7 @@ You can create a list of countries for which you'd like to block traffic. This c
 
 .. figure:: _figures/manage-country-deny.png
 
-`d)` Returning to the previous screen, note the option to deny requests from OFAC-sanctioned countries without creating your own list, just tick the option in the F5 Cloud Servcies portal and **Update**.
+`d)` Returning to the previous screen, note the option to deny requests from OFAC-sanctioned countries without creating your own list, just tick the option in the F5 Cloud Services portal and **Update**.
 
 .. figure:: _figures/140.png
  
@@ -516,7 +516,7 @@ More detailed information on this request can be found `here <https://bit.ly/3ck
 
 If you prefer to customize your blocked page acc to your wish, you can do it using Postman. 
 
-`a)` First, let's see the existing page prior to sending the request. To do that, let's simulate an attack via the browser. Paste "**Fully Qualified Domain Name (FQDN)**/nginx.config" address to your browser. The result will looks something like this:
+`a)` First, let's see the existing page prior to sending the request. To do that, let's simulate an attack via the browser. Paste "**Fully Qualified Domain Name (FQDN)**/nginx.config" address to your browser. The result will look something like this:
 
 .. figure:: _figures/124.png 
 
@@ -524,7 +524,7 @@ If you prefer to customize your blocked page acc to your wish, you can do it usi
  
 .. figure:: _figures/179.png 
 
-`c)` Give it a few seconds, and then refresh the page in the browser opened above to re-send the request for disallowed file type.
+`c)` Give it a few seconds, and then refresh the page in the browser opened above to re-send the request for a disallowed file type.
 
 .. figure:: _figures/125.png 
 
@@ -633,7 +633,7 @@ You can see our two app endpoints (blue circles) and the latest attacks on the m
 
 .. figure:: _figures/200.png 
 
-If an endpoint is being attacked at the moment, the source and the type of the malicious requsets is shown by hovering over the target endpoint:
+If an endpoint is being attacked at the moment, the source and the type of the malicious requests are shown by hovering over the target endpoint:
 
 .. figure:: _figures/203.png 
 
@@ -648,7 +648,7 @@ You can analyze the detail of these attacks via the UI in the **VIEW EVENTS** ta
 
 .. figure:: _figures/197.png 
 
-You can also look at any of the individual malicious requests for details on the attack signatures triggered, the type of an attack, and action you can assign to the originating IP address (block, for example). You can also choose to flag this request as a false positive by marking it as exception.
+You can also look at any of the individual malicious requests for details on the attack signatures triggered, the type of an attack, and action you can assign to the originating IP address (block, for example). You can also choose to flag this request as a false positive by marking it as an exception.
 
 .. figure:: _figures/111-v2.png 
 
@@ -668,7 +668,7 @@ More detailed information on this request can be found `here <https://bit.ly/2Vt
 20. Specify SSL Certificate via Postman
 ***************************************
 
-When creating Essential App Protect instance at the start of the lab, we chose to skip providing an SSL/TLS certificate. Let's now implement HTTPS/SSL via Postman. 
+When creating the Essential App Protect instance at the start of the lab, we chose to skip providing an SSL/TLS certificate. Let's now implement HTTPS/SSL via Postman. 
 
 `a)` Let's send the **Get SSL Certificate (lab)** request:
 
@@ -690,7 +690,7 @@ The response will return the certificate ID which will be used for updating the 
 
 .. figure:: _figures/208.png 
 
-`c)` The next step will enable Essential App Protect configuration to support HTTPS and configure TLS using our certificate id from the above step. In order to do that, send the **Update EAP SSL Certificate** request from Postman:
+`c)` The next step will enable the Essential App Protect configuration to support HTTPS and configure TLS using our certificate id from the above step. In order to do that, send the **Update EAP SSL Certificate** request from Postman:
 
 .. figure:: _figures/209.png 
 
@@ -735,7 +735,7 @@ When the EAP instance is back to "Active" (and a few minutes after the status ch
 
 Let's look at the SSL/certificate details via the UI. 
 
-Click on your EAP instance, and open the **PROTECT APPLICATION** secttion, then click on the **General** tab. You will see the SSL/TLS details and the name of the domain & the expiration data of the certificate. 
+Click on your EAP instance, and open the **PROTECT APPLICATION** section, then click on the **General** tab. You will see the SSL/TLS details and the name of the domain & the expiration data of the certificate. 
 
 In the "Manage listener details" you can see that both listeners are enabled, but HTTP is redirected to HTTPS. Let's give it a try!
 
@@ -749,14 +749,12 @@ You will notice that the HTTP is redirected to HTTPS, showing that the connectio
 
 .. figure:: _figures/218.png 
 
-**YOU'RE DONE !**
-*****************
+**YOU'VE MADE IT THROUGH THE LAB !**
+************************************
 
-Congrats on completing this lab! You've create an instance of F5 Essential App Protect, protected your test app, and sent a number of different attacks with different configurations. Hopefully this was fun, and you've learned something in the process! 
+Congrats on completing this lab! You've created an instance of F5 Essential App Protect, protected your test app, and sent a number of different attacks with different configurations. Hopefully, this was fun as well, and you've learned something in the process! 
 
-At this point feel free to explore and repeat any of the previous steps of the lab, but should you want to clean up the resources you've created and remove your services, then follow the steps below.
-
-The only remaining step is to clean up your service (retire the instance, reset the App DNS, and clear the token). This step is optional, although we do recommend you clean / remove the Postman tokens.
+At this point feel free to explore and repeat any of the previous steps of the lab. Once you're all done, the only remaining step is to clean up your service (retire the instance, reset the App DNS, and clear the token). This step is optional, although we do recommend you clean / remove the Postman tokens.
 
 Clean Up  
 ######## 
@@ -770,7 +768,7 @@ At this point feel free to explore and repeat any of the previous steps of the l
 
 .. figure:: _figures/219.png
  
-You will see status of “retired” status in the response body which means that it’s no longer available in the F5 Cloud Services portal.
+You will see the status of “retired” status in the response body which means that it’s no longer available in the F5 Cloud Services portal.
  
 .. figure:: _figures/220.png
   
