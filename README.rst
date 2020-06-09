@@ -11,7 +11,7 @@ Pre-Requisites
 
 **IMPORTANT NOTE**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration.
 
-You can quickly tell if you have a full account by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_. If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you will need to create a full account & update user info before you can proceed with this lab. You can do so in the step 3(c) below via the F5 Cloud Services API using the Postman request titled "Set User Info (optional)", the details of which are outlined below after the Login.
+You can quickly tell if you have a full account by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_. If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you will need to create a full account & update user info before you can proceed with this lab. You can do so in step 3(c) below via the F5 Cloud Services API using the Postman request titled "Set User Info (optional)", the details of which are outlined below after the Login.
 
 Lab Environment Overview
 ###############################
@@ -21,7 +21,7 @@ Lab Environment Overview
 
 This Lab utilizes standard *F5 Cloud Services API*, as well as a *Lab Service API*, which was custom-built just for executing this lab: 
 
-* **F5 Cloud Services API**: create, use, and remove the services in scope of this lab 
+* **F5 Cloud Services API**: create, use, and remove the services in the scope of this lab 
 
 * **Lab service API**: facilitates auxiliary functions for the lab only: creating DNS entries, sending targeted requests & traffic to the apps/services, etc.  
 
@@ -38,7 +38,7 @@ Lab Environment Setup
 
 `a)` Login   
 
-In order to use F5 Essential App Protect service, you need access to F5 Cloud Services and be logged in with a valid user account. If you need to sign up, or if you already have one, proceed to the `F5 Cloud Services portal <http://bit.ly/f5csreg>`_.  
+In order to use the F5 Essential App Protect service, you need access to F5 Cloud Services and be logged in with a valid user account. If you need to sign up, or if you already have one, proceed to the `F5 Cloud Services portal <http://bit.ly/f5csreg>`_.  
 
 .. figure:: _figures/1-1.png  
 
@@ -46,13 +46,13 @@ Once you've logged in with an account, you will be using the user name and passw
 
 `b)` Subscribe to Catalogs   
 
-In order to access specific F5 Cloud Services, you need to subscribe to the corresponding service catalogs. The focus of this lab is on F5 Essential App Protect service, so you will need to subscribe to it. At the time of writing you can take advancate of a 10-day free trial offer to work with this service -- no payment method required!
+In order to access specific F5 Cloud Services, you need to subscribe to the corresponding service catalogs. The focus of this lab is on F5 Essential App Protect service, so you will need to subscribe to it. At the time of the writing of this lab you can take advantage of a 15-day free trial offer to work with this service -- no payment method required!
 
-   `1.` Click on the **Your F5 Cloud** tab in the left navigation panel and you will see the available service catalogs, as well as services you have subscribed to, if any. For this lab you will need to subscribe to **Essential App Protect** services.   
+   `1.` Click on the **Your F5 Cloud** tab in the left navigation panel and you will see the available service catalogs, as well as services you have subscribed to, if any. For this lab you will need to subscribe to **Essential App Protect** service.   
 
-   .. figure:: _figures/2.png  
+   .. figure:: _figures/2-trial.png  
 
-   `2.` You can subscribe to the service, or start a free trial (if available). For full subscription you will need to provide payment information in the **Accounts** - **Payments** section, by adding a credit card, or alternatively subscribing through AWS Marketplace.    
+   `2.` You can also choose to subscribe to the service versus starting a free trial (if available). For full subscription you will need to provide payment information in the **Accounts** - **Payments** section, by adding a credit card, or alternatively subscribing through AWS Marketplace.    
 
    .. figure:: _figures/3.png  
 
@@ -66,7 +66,7 @@ In order to access specific F5 Cloud Services, you need to subscribe to the corr
 
 `a)` Download Postman `here <http://bit.ly/309wSLl>`_, open it, create a Postman account if you don’t have one and choose to do so, and sign in.  
 
-`b)` Download collection **F5 Cloud Services EAP LAB.postman_collection.json** and environment **F5 Cloud Services EAP LAB.postman_environment.json** for Postman `here <https://bit.ly/2PK0z1J>`_. Import them to your Postman.  
+`b)` Download collection **F5 Cloud Services EAP LAB.postman_collection.json** and environment **F5 Cloud Services EAP LAB.postman_environment.json** for Postman `here <https://github.com/f5devcentral/f5-cloudserviceeaplab/tree/master/postman>`_. Import them to your Postman.  
 
 .. figure:: _figures/1.jpg  
 
@@ -79,7 +79,7 @@ You are now ready to interface with the F5 Cloud Services using Postman.
 3. Fully Qualified Domain Name (FQDN) 
 **************************** 
 
-In order to create Essential App Protect instance in the F5 Cloud Services portal, you need to have a FQDN. Use Postman and follow the steps below to get FQDN from the Lab service API.     
+In order to create the Essential App Protect instance in the F5 Cloud Services portal, you need to have an FQDN. Use Postman and follow the steps below to get FQDN from the Lab service API.     
 
 `a)` Open the “F5 Cloud Services EAP LAB” environment variables by clicking the “Environment Quick Look”, click into the field of the corresponding variable, and type the value of user email in the variable “USER_EMAIL” (click **Enter** after typing the values).  
 
@@ -99,11 +99,13 @@ These tokens are then stored for subsequent calls using a function inside Postma
 
 .. figure:: _figures/9.jpg  
 
-**NOTE**: If any of the subsequent Postman calls return a blank response or **"status": "unauthorized"** response (see the screenshot below), it means your user token has expired and you will need to re-login. To do that you just need to re-send the **Login** request.  
+**NOTE**: If any of the subsequent Postman calls return a blank response or **"status": "unauthorized"** response (see the screenshot below), it means that your user token has expired and you will need to re-login. To do that you just need to re-send the **Login** request.  
 
 .. figure:: _figures/10.jpg  
 
-`c)` OPTIONAL: Set User ID & Account Info
+`c)` OPTIONAL: Set User ID & Account Info 
+
+You can skip this step for brand new accounts. 
 
 **IMPORTANT NOTE**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration. You can quickly tell if you have by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_ If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you need to create a full account & update user info before you can proceed with this lab.
 
@@ -200,7 +202,7 @@ F5 Essential App Protect Service
 1. Create F5 Essential App Protect Service via the F5 Cloud Services Portal  
 ************************************************************************ 
 
-`a)` In order to create Essential App Protect service, open the **Get FQDN Record type (lab)** request in Postman and copy "record" name in the response.  
+`a)` In order to create the Essential App Protect service, open the **Get FQDN Record type (lab)** request in Postman and copy "record" name in the response.  
 
 .. figure:: _figures/115.png
 
@@ -469,7 +471,7 @@ Click **Manage countries** to see the countries that are blocked:
 
 .. figure:: _figures/121.png
 
-`c)` Let's test how country-base blocking works. Go back to Postman and send the **Test Country Blocking (lab)** request which uses your "EAP record". 
+`c)` Let's test how the country-basis blocking works. Go back to Postman and send the **Test Country Blocking (lab)** request which uses your "EAP record". 
 
 .. figure:: _figures/177.png
 
@@ -482,7 +484,7 @@ Let's open the F5 UI and go to **VIEW EVENTS** section to see the newly blocked 
 
 If you need to block specific IP addresses or add them to the whitelist, you can do it in two ways: via Postman or UI. If you prefer to do it via Postman, then proceed to the next section. If your choice is UI, then follow the steps below: 
 
-`a)` Go to **PROTECT APPLICATION**-> the **High-risk Attack Mitigation** tab and click **Manage rules**. 
+`a)` Go to **PROTECT APPLICATION**-> the **High-risk Attack Mitigation** tab and click **Manage Rules**. 
 
 .. figure:: _figures/150.png
 
@@ -577,7 +579,7 @@ You can see the type of attack and some more detailed information in the **VIEW 
 
 .. figure:: _figures/155.png 
 
-`b)` Let's now simulate SQL Injection attack via browser and our "BuyTime Auction" app. Copy your FQDN from the F5 Cloud Services portal and paste to your browser. 
+`b)` Let's now simulate SQL Injection attack via browser and our "BuyTime Auction" app. Copy your FQDN from the F5 Cloud Services portal and paste in your browser. 
 
 .. figure:: _figures/188.png 
 
@@ -635,7 +637,7 @@ If an endpoint is being attacked at the moment, the type of attack is shown over
 
 .. figure:: _figures/203.png 
 
-In **MONITOR APPLICATION** you will find information on malicious requests received by the application. The histogram shows the history of malicious activity over the last two hours in five-minute increments. The donut chart shows the percentage of malicious requests blocked during the last time period as well as the specific numbers of blocked and not blocked requests.
+In **MONITOR APPLICATION** you will find information on malicious requests received by the application. The histogram shows the history of malicious activity over the last two hours in five-minute increments. The donut chart shows the percentage of malicious requests blocked during the last time period, as well as the specific numbers of blocked and not blocked requests.
 
 .. figure:: _figures/201.png 
 
