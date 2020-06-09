@@ -99,7 +99,7 @@ These tokens are then stored for subsequent calls using a function inside Postma
 
 .. figure:: _figures/9.jpg  
 
-**NOTE**: If any of the subsequent Postman calls return a blank response or **"status": "unauthorized"** response (see the screenshot below), it means that your user token has expired and you will need to re-login. To do that you just need to re-send the **Login** request.  
+**IMPORTANT NOTE**: If any of the subsequent Postman calls return a blank response or **"status": "unauthorized"** response (see the screenshot below), it means that your user token has expired and you simply need to re-login. To do that you just need to re-send the **Login** request using Postman to capture a new token.  
 
 .. figure:: _figures/10.jpg  
 
@@ -261,9 +261,9 @@ Now that your Essential App Protect instance is created, we will update the DNS 
 
 .. figure:: _figures/127.png 
 
-As you can see, it's not successful. We will update DNS settings using Postman to fix that.
+As expected, it returns "DNS test failed" because we didn't update the CNAME value of our test app's record yet. Let's do that now.
 
-`b)` Go back to Postman to change the DNS settings. Send the **Get EAP Subscription** request to get the "subscription_id" and "CNAME" using your "ACCESS_TOKEN".
+`b)` Go back to Postman and use the **Get EAP Subscription** request to get the "subscription_id" and "CNAME" using your "ACCESS_TOKEN".
 
 .. figure:: _figures/164.png
 
@@ -271,13 +271,13 @@ The response will return all information on your instance which we have created 
 
 .. figure:: _figures/165.png
 
-The retrieved CNAME will be used to update DNS settings:
+The retrieved CNAME will stored as a variables and will also be used to update the DNS settings:
 
 .. figure:: _figures/166.png
 
 More detailed information on this API request can be found `here <http://bit.ly/38xUHjc>`_.  
 
-`c)` Send the **Update CNAME Record (lab)** request to update DNS Settings with CNAME generated when creating Essential App Protect instance in the F5 Cloud Services portal and retrieved in the step above:
+`c)` Send the **Update CNAME Record (lab)** request to update our test app's DNS Settings with the generated CNAME, which we captured in the UI earlier, and just now in the previous step using the API request as well:
 
 .. figure:: _figures/167.png
 
