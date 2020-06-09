@@ -103,11 +103,11 @@ These tokens are then stored for subsequent calls using a function inside Postma
 
 .. figure:: _figures/10.jpg  
 
-`c)` OPTIONAL: Set User ID & Account Info 
+`c)` OPTIONAL (existing F5 cloud service accounts only): Set User ID & Account Info 
 
-You can skip this step for brand new accounts. 
+**IMPORTANT NOTE**: You can skip this step and proceed to step (d) if you have just created a brand new account. 
 
-**IMPORTANT NOTE**: If you originally signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration. You can quickly tell if you have by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_ If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you need to create a full account & update user info before you can proceed with this lab.
+ However, if you were previously signed up for F5 Cloud Services through a Limited User invitation (such as an email invite from another lab or from a different account owner), then it is possible that you haven't yet completed a full registration. You can quickly tell if you have by looking at your account(s) in the `F5 Cloud Services Portal <https://portal.cloudservices.f5.com/>`_ If you do now see any "Accounts you own:" and only see "Accounts you've been granted access to" as a **"Limited User"**, then you need to create a full account & update user info before you can proceed with this lab.
 
 You can do this by running the following **Set User Info** API call, after you've updated the Body of the request with your own organization & address information:
 
@@ -299,25 +299,25 @@ Return to the F5 Cloud Services portal, open the **Essential App Protect** tab, 
 
 .. figure:: _figures/106.png 
 
-You will see successful status of testing.
+You should see "Success" indicating that our DNS updates succeeded!
 
 
 `f)` Test via Browser
 
-Let's now test the updated DNS setting via browser. Return to the F5 Cloud Services portal, open the **General** tab and copy the FQDN.
+Let's now test the updated DNS setting via browser. Return to the F5 Cloud Services portal, open the **General** tab and copy the original FQDN of the test app.
 
 .. figure:: _figures/234.png
 
-Paste it into your browser and you will see the NA2 instance of the Auction website and all of the requests will now be flowing through the Essential App Protect, which means your app is now protected. However, any malicious requests will not be blocked, as we have not turned on "Blocking" mode yet.
+Paste it into your browser and you will see the NA2 instance of the Auction website and all of the requests will now be flowing through your very own Essential App Protect instance, which means your app is now ready to be protected. However, any malicious requests will not be blocked yet, as we have not turned on "Blocking" mode at this point. We can do so in the subsequent steps.
 
 .. figure:: _figures/131.png
 
 3. Review the JSON via UI 
-******************
+*************************
 
-If you would like to see the full configuration of your Essential App Protect or edit some properties, you can review the JSON either via UI or via Postman. If you prefer to do that via Postman, then proceed to the next section. 
+To retrieve the full configuration of your Essential App Protect instance or to edit some of its properties programatically, you can use the UI or the API to access its JSON configuration.
 
-In order to view the JSON via the F5 Cloud Services portal, open **PROTECT APPLICATION** and go to the **JSON configuration** tab. 
+To view the JSON via the F5 Cloud Services portal, open **PROTECT APPLICATION** and go to the **JSON configuration** tab. 
 
 .. figure:: _figures/132.png
 
@@ -331,24 +331,24 @@ In the "application" section, we can see our FQDN, region our instance belongs t
 
 .. figure:: _figures/134.png
 
-In the "policy" section, we can learn all the information about our protection and its settings, as well as about each attack type.
+In the "policy" section notice the protection settings, as well as options for diferent attack types.
 
 .. figure:: _figures/135.png
 
-More detailed information on attack types can be found in Section 5 below. 
+More detailed information on attack types can be found in the Section 5 below. 
 
 4. Review the JSON via Postman 
 *******************************
 
-If you prefer to use Postman to review the JSON, go back to Postman and send the **Get JSON** request:
+Now let's access the same configuration using the API; back in Postman send the **Get JSON** request:
 
 .. figure:: _figures/136.png
 
-The response will retrieve the JSON containing all the Essential App Protect instance information: 
+This response will return the JSON containing all of the Essential App Protect instance configuration: 
 
 .. figure:: _figures/137.png
 
-The returned JSON provides some general information on subcription_id, user_id, and instance name, as well as all configuration details (CNAME, FQDN, etc) and protection settings. 
+Notice parity of the EAP JSON "configuration" section with what you were seeing in the UI, plus some additional detail such as the subcription_id, user_id, and instance name. Of course, as expected the config details (CNAME, FQDN, etc) and protection settings are the same.
 
 .. figure:: _figures/169.png
 
@@ -357,48 +357,48 @@ More detailed information on this API request can be found `here <http://bit.ly/
 5. Attacks  
 *********** 
 
-There are three types of attacks:  
+We will be using three basic types of attacks to test our EAP instance:
 
 `1)` SQL Injection 
 
-This attack inserts a SQL query via the input data field in the web application. Such attacks could potentially read sensitive data, modify and destroy it. More detailed information can be found `here <http://bit.ly/2RfmXkw>`_.
+This attack inserts a SQL query via the input data field in a web application. Such attacks could potentially read sensitive data, modify and destroy it. More detailed information can be found `here <http://bit.ly/2RfmXkw>`_.
 
 `2)` Illegal Filetype 
 
-This attack combines valid URL path segments with invalid input to guess or brute-force download of sensitive files or data. More detailed information can be found `here <http://bit.ly/30NrAFF>`_.  
+This attack combines a valid URL path segment with invalid input to guess or brute-force download of sensitive files or data. More detailed information can be found `here <http://bit.ly/30NrAFF>`_.  
 
 `3)` Threat Campaign 
 
-These types of attacks are the category that F5 Labs tracks as coordinated campaigns that exploit known vulnerabilities. This particular attack simulates using a known Tomcat backdoor vulnerability. The complete list of such threats can be found `here <http://bit.ly/36bPmfG>`_.   
+These types of attacks are the category that F5 Labs tracks as coordinated campaigns that exploit known vulnerabilities. The attack type in our lab is simulating a known Tomcat backdoor vulnerability. The complete list of such threats can be found `here <http://bit.ly/36bPmfG>`_.   
 
-Let’s now simulate an attack.
+Now, let's simulate some attacks.
 
-Go back to Postman and send the **Attack: Illegal Filetype** request. 
+Within Postman select and send the **Attack: Illegal Filetype** request. 
 
 .. figure:: _figures/170.png
 
-You can see the status of the attack in the **VIEW EVENTS** section of the F5 Cloud Services portal.
+To view the captured event we'll go back into the UI, under the **VIEW EVENTS** section of the F5 Cloud Services portal EAP instance. You can click on the event and explore the detail including the "View full request" option.
 
 .. figure:: _figures/138.png
 
-As you see, our "Illegal file type" attack has appeared on the list and its status is "Not blocked" for now.  
+As you see, our "Illegal file type" attack has appeared in the events; notice the status is "Not blocked" as that was the state that we selected at the time of the creation of the instance. Let's now update from Monitoring to Blocking mode!  
 
 6. Update Monitoring to Blocking via UI 
 *************************************** 
 
-For now all the threats of your app are only monitored without any actions taken. You can change monitoring to blocking both via the F5 Cloud Services portal and via Postman. Let's change monitoring to blocking for High-risk Attack Mitigation via the F5 Cloud Services portal, and for Malicious IP and Threat Campaigns via Postman in the next section. 
+For now all the threats of your app are only monitored without any actions taken. You can change monitoring to blocking both via the F5 Cloud Services portal and via Postman. Let's start with changing from monitoring to blocking for High-risk Attack Mitigation via the F5 Cloud Services portal, and for Malicious IP and Threat Campaigns via Postman in the following section. 
 
-`a)` In order to start blocking attacks, go to the **PROTECT APPLICATION** tab, then open **High-risk Attack Mitigation** and toggle **Blocking Mode** on. Click **Update**:  
+`a)` In order to start blocking attacks, go to the **PROTECT APPLICATION** tab, then open **High-risk Attack Mitigation** and toggle **Blocking Mode** on. Click **Update** (and give it a few seconds to update).  
 
 .. figure:: _figures/105.png 
 
 `b)` Testing the status 
 
-Now that the protection mode is "blocking" for **High-risk Attack Mitigation**, you can re-send the **Attack: Illegal Filetype** request in Postman. After that go back to the F5 UI, open **VIEW EVENTS** and you will see the new attack with the "Blocked" status:
+Now that the protection mode is "blocking" for **High-risk Attack Mitigation**, you can re-send the **Attack: Illegal Filetype** request in Postman. After that go back to the EAP portal, open **VIEW EVENTS** and you will see the new attack with the "Blocked" status:
 
 .. figure:: _figures/119.png
 
-Note that its status is also updated in the **PROTECT APPLICATION** data card. 
+Note the updated protection status in the **PROTECT APPLICATION** data card. 
 
 
 7. Update Monitoring to Blocking via Postman 
@@ -410,11 +410,11 @@ Let's now change monitoring to blocking for Malicious IP and Threat Campaigns vi
 
 .. figure:: _figures/173.png
 
-You will see the updated "blocked" status of attacks in the response. 
+You will see the response with key/value pairs updated to look like this: "enforcement_mode": "blocking".
 
 .. figure:: _figures/174.png
 
-You can also notice that their status changed in the F5 UI:
+You can also see the mode changes reflected in the F5 Cloud Services portal EAP UI:
 
 .. figure:: _figures/139.png
 
@@ -430,14 +430,14 @@ Also send the **Attack: SQL Injection** request:
 
 .. figure:: _figures/172.png
 
-After that go back to the F5 UI, open **VIEW EVENTS** and you will see the new attacks with the "Blocked" status:
+After that go back to the F5 UI, open **VIEW EVENTS** and you will see the new attack events with their "Blocked" status:
 
 .. figure:: _figures/175.png
 
 8. Geolocation Enforcement via UI
 ****************************
 
-You can create a list of countries traffic from which will be blocked via UI or via Postman. If you prefer to do so via Postman, proceed to the next section.
+You can create a list of countries for which you'd like to block traffic. This can of course be done from the UI or Postman as well. Below we'll cover the UI, and the following section will do the same via Postman.
 
 `a)` Go back to the F5 Cloud Services portal, the **PROTECT APPLICATION** tab, then go to **High-risk Attack Mitigation**  and click 
 **Deny requests from specific countries**. This will activate the **Manage countries** button.   
@@ -448,11 +448,11 @@ You can create a list of countries traffic from which will be blocked via UI or 
 
 .. figure:: _figures/228.png
 
-`c)` Let's add France as a country whose requests you want to deny and click **Update**.
+`c)` Here you can use the "+" button to add more specific countries from which the traffic would be denied.
 
-.. figure:: _figures/143.png
+.. figure:: _figures/manage-country-deny.png
 
-`d)` If you prefer to deny requests from OFAC-sanctioned countries without creating your own list, just tick the option in the F5 Cloud Servcies portal and **Update**.
+`d)` Returning to the previous screen, note the option to deny requests from OFAC-sanctioned countries without creating your own list, just tick the option in the F5 Cloud Servcies portal and **Update**.
 
 .. figure:: _figures/140.png
  
@@ -463,7 +463,7 @@ You can create a list of countries traffic from which will be blocked via UI or 
 
 .. figure:: _figures/176.png 
 
-The response will show the countries blocked: 
+The response will show the countries blocked (here used for testing): 
 
 .. figure:: _figures/149.png
 
@@ -477,35 +477,35 @@ Click **Manage countries** to see the countries that are blocked:
 
 .. figure:: _figures/121.png
 
-`c)` Let's test how the country-basis blocking works. Go back to Postman and send the **Test Country Blocking (lab)** request which uses your "EAP record". 
+`c)` Let's test how the country-basis blocking works. Go back to Postman and send the **Test Country Blocking (lab)** request which uses a proxy in North America to send traffic to your test app domain. 
 
 .. figure:: _figures/177.png
 
-Let's open the F5 UI and go to **VIEW EVENTS** section to see the newly blocked attack based on geolocation: 
+The response will return the blocked page generated by EAP. Let's have a look at this event in the F5 UI: go to **VIEW EVENTS** section to see the newly-blocked traffic based on the request we just sent from the North America proxy: 
 
 .. figure:: _figures/178.png
 
 10. Update IP Enforcement Rules via UI  
 ********************************
 
-If you need to block specific IP addresses or add them to the whitelist, you can do it in two ways: via Postman or UI. If you prefer to do it via Postman, then proceed to the next section. If your choice is UI, then follow the steps below: 
+You can choose to block a set of IP addresses via "IP Enforcement Rules". Below we'll use the UI, and in the following section use the API via Postman.
 
 `a)` Go to **PROTECT APPLICATION**-> the **High-risk Attack Mitigation** tab and click **Manage Rules**. 
 
 .. figure:: _figures/150.png
 
-`b)` Add "34.229.48.248" IP for blocking and "77.120.157.224" IP to the whitelist. Add a short description for each, tick those which you prefer to be logged and click **Update**. 
+`b)` Here we will add "34.229.48.248" IP to be blocked, click "+" to add a new record and use "77.120.157.224" IP to be whitelisted (allowed). Add a short description for each, check to log events for the blocked IP and click **Update**. 
 
 .. figure:: _figures/151.png
 
 11. Update IP Enforcement Rules via Postman  
 ********************************
 
-`a)` Go to Postman and send the **Update IP Enforcement Rules** request which uses your "account_id" and "EAP record".
+`a)` Go to Postman and send the **Update IP Enforcement Rules** request:
 
 .. figure:: _figures/122.png
 
-In the response you will see four blocked and one allowed IPs. 
+In the response in the "ip_enforcement" section you will now see four blocked IPs and one allowed IP. 
 
 .. figure:: _figures/152.png
 
@@ -516,19 +516,19 @@ More detailed information on this request can be found `here <https://bit.ly/3ck
 
 If you prefer to customize your blocked page acc to your wish, you can do it using Postman. 
 
-`a)` First, let's see the page prior to sending the request. To do that, let's simulate an attack via the browser. Paste "**Fully Qualified Domain Name (FQDN)**/nginx.config" address to your browser. The result will be the following:
+`a)` First, let's see the existing page prior to sending the request. To do that, let's simulate an attack via the browser. Paste "**Fully Qualified Domain Name (FQDN)**/nginx.config" address to your browser. The result will looks something like this:
 
 .. figure:: _figures/124.png 
 
-`b)` Go back to Postman and send the **Customize blocked page** request which uses your **account_id** and **EAP record**. 
+`b)` Go back to Postman and send the **Customize blocked page** request. You can see the HTML used for the new page in the "Body" of the request. 
  
 .. figure:: _figures/179.png 
 
-`c)` Refresh the page in the browser opened one step above and you will see:
+`c)` Give it a few seconds, and then refresh the page in the browser opened above to re-send the request for disallowed file type.
 
 .. figure:: _figures/125.png 
 
-**Note**: It may take  some time due to updating the service. 
+**Note**: It may take a few seconds to update the service with your changes.
 
 13. Add New Endpoints 
 *********************
