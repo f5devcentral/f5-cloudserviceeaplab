@@ -68,7 +68,7 @@ In order to access specific F5 Cloud Services, you need to subscribe to the corr
 
 `b)` Clone this repo or Download the ZIP for this repository, and locate the Postman JSON files inside "postman" folder. You will be using these collections: **F5 Cloud Services EAP LAB.postman_collection.json** and environment **F5 Cloud Services EAP LAB.postman_environment.json** for Postman `here <https://github.com/f5devcentral/f5-cloudserviceeaplab/tree/master/postman>`_. 
 
-Click on the "Collections" tab in Postman. Import each JSON file ** ONE AT A TIME ** into Postman.
+Click on the "Collections" tab in Postman. Import each JSON file * **ONE AT A TIME** * into Postman.
 **IMPORTANT NOTE**: Currently Postman sems to have a bug if you attempt to import both JSON files (environment & collection) together, and when doing so the Collection will disappear. 
 
 .. figure:: _figures/1.jpg  
