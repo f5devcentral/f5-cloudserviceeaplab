@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4db05f91-ee95-48ce-aa2e-8beb21e191f6",
+		"_postman_id": "eef8dcf9-b3ca-4e55-b22f-ff368f9d0f89",
 		"name": "F5 Cloud Services EAP LAB",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "59b92a4a-fdde-4621-9e07-a89329200b95",
 								"exec": [
 									"pm.test(\"Set token variable\", function() {",
 									"    var jsonData = pm.response.json();",
@@ -64,7 +63,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "46294424-e7e8-43f3-826c-da3a78cc9fc1",
 								"exec": [
 									"pm.test(\"Set account_id variable\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -115,7 +113,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "63904475-45fe-4bca-b7e4-a0a8e07fe2c2",
 								"exec": [
 									"pm.test(\"Set account_id and user_id variables\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -160,7 +157,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "dfcbd634-c6b6-4d78-bbd6-fedbdfe610be",
 								"exec": [
 									"pm.test(\"Get User's EAP Record\", function() {",
 									"    var jsonData = pm.response.json();",
@@ -212,12 +208,12 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "11f7d91d-a1d2-4f1a-a011-8cf5c471bfca",
 								"exec": [
 									"pm.test(\"Switch account\", function() {",
 									"    var jsonData = pm.response.json();",
+									"    var accountName = pm.environment.get(\"ACCOUNT_NAME\");",
 									"    for(var i=0; i<jsonData.memberships.length; i++) {",
-									"        if (jsonData.memberships[i].account_name === \"{{ACCOUNT_NAME}}\") {",
+									"        if (jsonData.memberships[i].account_name === accountName) {",
 									"            pm.environment.set(\"ACCOUNT_ID\", jsonData.memberships[i].account_id);",
 									"        }",
 									"    }",
@@ -259,7 +255,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b347a51f-8d38-46ef-9794-e0f2f26c0689",
 								"exec": [
 									"pm.test(\"Set Catalog variables\", function() {",
 									"    var jsonData = pm.response.json();",
@@ -298,8 +293,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Essential App Protect",
@@ -310,7 +304,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "ab48d864-9b06-40fc-ab00-811ae873a742",
 								"exec": [
 									"pm.test(\"Find previously created subscription\", function() {",
 									"    const jsonData = pm.response.json();",
@@ -415,7 +408,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8a0d845a-6def-46b3-bb43-6e2c753fa705",
 								"exec": [
 									""
 								],
@@ -489,7 +481,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "902d7342-2381-4977-85e0-34ea836a0e9c",
 								"exec": [
 									""
 								],
@@ -619,7 +610,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "3160d7d9-4f3b-43ce-bdbc-af394d301320",
 								"exec": [
 									""
 								],
@@ -713,7 +703,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b8c8fe40-b63e-4fbf-802d-7bfbcef71067",
 								"exec": [
 									""
 								],
@@ -762,7 +751,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "66e12003-2981-4415-8ea0-f146d3b65e09",
 								"exec": [
 									""
 								],
@@ -811,7 +799,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "c0243e68-a963-4d11-b543-bbdab9c31be4",
 								"exec": [
 									""
 								],
@@ -982,7 +969,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d740ca51-e25d-4ed6-b963-78a5c99da3b6",
 								"exec": [
 									"pm.test(\"Set certificate and key\", function() {",
 									"    var jsonData = pm.response.json();",
@@ -1042,7 +1028,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "0aef7c28-348c-4427-a6dc-64c7e02acb93",
 								"exec": [
 									"pm.test(\"Set certificate ID\", function() {",
 									"    var jsonData = pm.response.json();",
@@ -1094,7 +1079,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "99016909-3e5d-46fe-ac24-9b4bc7cafb7e",
 								"exec": [
 									""
 								],
@@ -1143,7 +1127,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "74f4698b-e9cf-49f5-8704-0c2f28cddc7b",
 								"exec": [
 									""
 								],
@@ -1189,7 +1172,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a907f3d6-ab4b-472c-9db9-dd7c96736a89",
 								"exec": [
 									""
 								],
@@ -1229,8 +1211,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Clean Up",
@@ -1241,7 +1222,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d532de00-ba7f-4113-b084-bbe400ced3ef",
 								"exec": [
 									""
 								],
@@ -1328,7 +1308,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "febb4960-80d9-494a-934d-888e23615b48",
 								"exec": [
 									"pm.test(\"Reset token variable\", function() {",
 									"    pm.environment.set(\"ACCESS_TOKEN\", \"\");",
@@ -1373,9 +1352,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
